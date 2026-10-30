@@ -22,9 +22,12 @@ expect "0.9^10 is 34.9%" "90.0%      34.9%" "$out"
 
 out=$(pnpm exec vitest run --config vitest.article.config.ts --reporter=verbose 2>&1 || true)
 expect "the article's unit test passes" "✓ article/article.spec.ts > 10% off \$100 = \$90" "$out"
-expect "the article's property 1 passes, so it doesn't find the bug" "✓ article/article.spec.ts > total is never negative" "$out"
-expect "the article's property 2 passes" "✓ article/article.spec.ts > 0% discount is the identity" "$out"
-expect "the article's property 3 errors before running" "fc.float constraints.min must be a 32-bit float" "$out"
+expect "the article's property 1 finds the bug" "× article/article.spec.ts > total is never negative" "$out"
+expect "...and shrinks it to one item of 1 at 101%" 'Counterexample: [[{"price":1,"quantity":1}],101]' "$out"
+expect "the article's property 2 passes" "✓ article/article.spec.ts > 0% discount is identity" "$out"
+expect "the article's property 3 passes" "✓ article/article.spec.ts > discount monotonicity" "$out"
+expect "original version: property 1 passes, so it doesn't find the bug" "✓ article/original.spec.ts > total is never negative" "$out"
+expect "original version: property 3 errors before running" "fc.float constraints.min must be a 32-bit float" "$out"
 
 pnpm exec vitest run --reporter=dot >/dev/null
 echo "ok   the findings in test/findings.test.ts hold"

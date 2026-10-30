@@ -12,10 +12,14 @@ article's, not a port.
 
 ## What running it showed
 
-Running the article's code turned up three things the article gets wrong, and one thing it gets
-right for a different reason than it says.
+The article's code is in `article/article.spec.ts`. It's the corrected version: the first one,
+published in April 2026, is kept in `article/original.spec.ts`, and the article was corrected on
+2026-10-30 because of what this repo found.
 
-1. **Property 1 passes.** The article says the property "total is never negative" fails and finds
+Running the original code turned up three things the article got wrong, and one thing it got
+right for a different reason than it said.
+
+1. **Property 1 passes.** The original article said the property "total is never negative" fails and finds
    a discount of 150%. It can't: its generator draws the discount from `fc.float({ min: 0, max: 100 })`,
    and with every discount between 0 and 100 the total is never negative. A hundred thousand runs
    find nothing.
@@ -47,7 +51,8 @@ so it couldn't find the bug that assumption hides.
 |---|---|
 | `src/discount.ts` | The agent's `applyDiscount`, as in the article. |
 | `src/discount-fixed.ts` | The same function, rejecting discounts outside [0, 100]. |
-| `article/article.spec.ts` | The article's unit test and three properties, verbatim except for translated test names. One of them errors, so `pnpm test` doesn't run this file; `check.sh` does. |
+| `article/article.spec.ts` | The article's unit test and three properties, as corrected, verbatim except for translated test names. Property 1 fails on purpose, so `pnpm test` doesn't run this file; `check.sh` does. |
+| `article/original.spec.ts` | The same, as first published. Property 1 passes (it can't find the bug) and property 3 errors. |
 | `test/findings.test.ts` | Each finding above as a test, plus the properties the fixed function passes. |
 | `src/reliability.ts`, `scripts/reliability.ts` | Compound reliability: `p^n`. |
 | `scripts/demo.ts` | Prints fast-check's report for the bug. |
