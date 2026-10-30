@@ -3,6 +3,8 @@
 # and its three properties actually do, and what a property with a generator
 # that covers the whole input range finds.
 set -euo pipefail
+# CI turns colors on; the checks below grep plain text.
+export NO_COLOR=1 FORCE_COLOR=0
 cd "$(dirname "$0")"
 
 [ -d node_modules ] || pnpm install --frozen-lockfile --silent
